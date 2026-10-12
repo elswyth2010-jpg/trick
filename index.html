@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Boo! 💗</title>
+
+    <style>
+        :root {
+            --pink: #ff78aa;
+            --deep-pink: #e94f91;
+            --purple: #d9b8ff;
+            --deep: #7b2857;
+            --cream: #fffaf0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            color: var(--deep);
+            text-align: center;
+            background: linear-gradient(135deg, #ffb7d5, #d8c5ff, #fff0c7);
+            overflow-x: hidden;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #9c4bba;
+            outline-offset: 4px;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            padding: 28px 16px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* WELCOME SCREEN */
+        #welcome {
+            cursor: pointer;
+            user-select: none;
+            background:
+                radial-gradient(circle at 20% 20%, #ffffffaa 0 3px, transparent 4px),
+                radial-gradient(circle at 80% 35%, #ffffffaa 0 4px, transparent 5px),
+                radial-gradient(circle at 30% 75%, #ffffffaa 0 3px, transparent 4px),
+                linear-gradient(135deg, #ffb7d0, #ffe7ef, #e8d9ff);
+            background-size: 100px 100px, 130px 130px, 150px 150px, cover;
+        }
+
+        .welcome-card {
+            width: min(100%, 570px);
+            padding: 38px 22px;
+            border: 2px solid #ffffffd9;
+            border-radius: 30px;
+            background: #ffffffa8;
+            box-shadow: 0 15px 45px #a84d7925;
+        }
+
+        .welcome-card h1 {
+            font-size: clamp(2.3rem, 9vw, 4rem);
+            margin: 5px 0 8px;
+        }
+
+        .welcome-card p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .big-heart {
+            font-size: clamp(5rem, 18vw, 7rem);
+            animation: heartbeat 1.3s infinite;
+        }
+
+        .hint {
+            margin-top: 28px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.45;
+            }
+        }
+
+        /* CONFETTI BACKGROUND */
+        #party {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .confetti {
+            position: absolute;
+            top: -25px;
+            width: 9px;
+            height: 15px;
+            border-radius: 3px;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(800deg);
+            }
+        }
+
+        /* BIRTHDAY PANEL */
+        .panel {
+            width: min(100%, 620px);
+            padding: 27px 18px 30px;
+            border: 2px solid #ffffffd9;
+            border-radius: 28px;
+            background: #fffaf0ed;
+            box-shadow: 0 15px 45px #8a356c25;
+            backdrop-filter: blur(7px);
+        }
+
+        .mission {
+            margin: 0 0 12px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        .panel h1 {
+            margin: 8px 0 12px;
+            font-size: clamp(2rem, 7vw, 3.1rem);
+        }
+
+        .intro {
+            line-height: 1.7;
+            margin: 8px auto;
+        }
+
+        /* CAKE + GIFT */
+        .cake-stage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            max-width: 420px;
+            min-height: 260px;
+            margin: 10px auto 8px;
+        }
+
+        .cake-area {
+            position: relative;
+            flex: 1;
+            max-width: 280px;
+            height: 250px;
+        }
+
+        .plate {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            height: 18px;
+            border-radius: 50%;
+            background: #e5d9ff;
+            border: 3px solid white;
+            box-shadow: 0 5px 8px #9d6c9d22;
+        }
+
+        .cake {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 205px;
+            max-width: 95%;
+        }
+
+        .cake-top {
+            position: relative;
+            z-index: 2;
+            height: 38px;
+            border: 3px solid white;
+            border-radius: 50%;
+            background: #ffe0f0;
+        }
+
+        .cake-body {
+            height: 88px;
+            margin-top: -7px;
+            border: 3px solid white;
+            border-radius: 10px 10px 20px 20px;
+            background: linear-gradient(#ffb4d3 0 25%, #ff80b2 25% 100%);
+            position: relative;
+        }
+
+        .cake-body::before {
+            content: "♡  ♡  ♡";
+            position: absolute;
+            top: 32px;
+            left: 0;
+            width: 100%;
+            color: white;
+            font-size: 1.3rem;
+            letter-spacing: 5px;
+        }
+
+        .candle {
+            position: absolute;
+            z-index: 3;
+            bottom: 145px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 65px;
+            border-radius: 5px 5px 2px 2px;
+            background: repeating-linear-gradient(-45deg,
+                    #fff 0 7px,
+                    #ff78aa 7px 14px);
+            border: 2px solid #ffffff;
+        }
+
+        .candle-number {
+            position: absolute;
+            top: 23px;
+            left: 0;
+            width: 100%;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #9b3b72;
+        }
+
+        .flame {
+            position: absolute;
+            width: 19px;
+            height: 29px;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse at 50% 70%, #fff7a6 0 18%, #ffb52e 45%, #ff6d36 75%);
+            border-radius: 50% 50% 45% 45%;
+            box-shadow: 0 0 18px #ffb52eaa;
+            transform-origin: center bottom;
+            animation: flicker 0.65s infinite alternate;
+        }
+
+        @keyframes flicker {
+            from {
+                rotate: -5deg;
+                scale: 0.95 1;
+            }
+
+            to {
+                rotate: 5deg;
+                scale: 1.05 1.06;
+            }
+        }
+
+        .gift {
+            flex: 0 0 auto;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #ffffff;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #ffe4f0, #e8d5ff);
+            box-shadow: 0 8px 18px #c07bb933;
+            font-size: 3.8rem;
+            transition: transform 0.2s;
+        }
+
+        .gift:hover {
+            transform: translateY(-5px) rotate(-4deg);
+        }
+
+        .gift:active {
+            transform: scale(0.95);
+        }
+
+        .gift:disabled {
+            cursor: default;
+            opacity: 0.75;
+        }
+
+        /* BUTTONS */
+        .primary {
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 25px;
+            margin: 8px 4px;
+            background: linear-gradient(135deg, #ff77aa, #c99bff);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 6px 16px #d36ca744;
+        }
+
+        .primary:hover {
+            filter: brightness(1.04);
+            transform: translateY(-1px);
+        }
+
+        .secondary {
+            border: 2px solid #f2a4c9;
+            border-radius: 999px;
+            padding: 11px 18px;
+            background: white;
+            color: var(--deep);
+            font-weight: bold;
+        }
+
+        .small {
+            font-size: 0.88rem;
+            opacity: 0.8;
+        }
+
+        .countdown {
+            min-height: 58px;
+            margin: 14px 0 4px;
+            font-size: clamp(2.2rem, 9vw, 3.5rem);
+            font-weight: bold;
+            color: #e94f91;
+        }
+
+        .ready-button {
+            margin-top: 10px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* POPUP */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #4a204a77;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            width: min(100%, 410px);
+            padding: 28px 22px;
+            border: 3px solid white;
+            border-radius: 27px;
+            background: linear-gradient(145deg, #fffaf4, #ffe7f1);
+            box-shadow: 0 18px 60px #38122b55;
+            animation: pop-in 0.25s ease-out;
+        }
+
+        @keyframes pop-in {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-emoji {
+            font-size: 3.3rem;
+            margin-bottom: 8px;
+        }
+
+        .modal h2 {
+            margin: 6px 0 12px;
+            font-size: clamp(1.6rem, 6vw, 2.1rem);
+        }
+
+        .modal p {
+            line-height: 1.65;
+        }
+
+        .sound-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #9a3371;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 420px) {
+            .welcome-card {
+                padding: 30px 16px;
+            }
+
+            .panel {
+                padding: 23px 12px;
+            }
+
+            .cake-stage {
+                gap: 0;
+                min-height: 230px;
+            }
+
+            .cake-area {
+                height: 225px;
+            }
+
+            .cake {
+                width: 175px;
+            }
+
+            .gift {
+                width: 78px;
+                height: 82px;
+                font-size: 3rem;
+                border-radius: 19px;
+            }
+
+            .candle {
+                bottom: 137px;
+            }
+
+            .plate {
+                bottom: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="party" aria-hidden="true"></div>
+
+    <!-- WELCOME SCREEN -->
+    <section class="page active" id="welcome" aria-label="Tap anywhere to begin">
+        <div class="welcome-card">
+            <h1>Hey, Boo~</h1>
+            <div class="big-heart">💗</div>
+            <!-- <p>Someone very special has a birthday today...</p> -->
+            <p>ready for the suprise?🎀</p>
+            <div class="hint">✨ TAP ANYWHERE TO BEGIN ✨</div>
+        </div>
+    </section>
+
+    <!-- BIRTHDAY SCREEN -->
+    <section class="page" id="birthday">
+        <main class="panel">
+            <p class="mission"></p>
+            <h1>Make a wish Boo! 💕</h1>
+            <p class="intro" id="intro">
+                Your birthday surprise is right here. Tap the present! 🎁
+            </p>
+
+            <div class="cake-stage">
+                <div class="cake-area">
+                    <div class="plate"></div>
+
+                    <div class="cake">
+                        <div class="cake-top"></div>
+                        <div class="cake-body"></div>
+                    </div>
+
+                    <div class="candle">
+                        <div class="flame" id="flame"></div>
+                        <!-- <div class="candle-number">21</div> -->
+                    </div>
+                </div>
+
+                <button class="gift" id="gift" type="button" aria-label="Tap the birthday present">🎁</button>
+            </div>
+
+            <div class="countdown" id="countdown" aria-live="polite"></div>
+
+            <p id="message">
+                <!-- The present is locked until you blow out the candle. 👀 -->
+            </p>
+
+            <button class="primary ready-button" id="readyButton" hidden>
+                I'm Ready! 🎂
+            </button>
+        </main>
+    </section>
+
+    <!-- POPUP -->
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalText">
+            <div class="modal-emoji" id="modalEmoji">🎀</div>
+            <h2 id="modalTitle">Wait a second!</h2>
+            <p id="modalText"></p>
+            <div id="soundFallback" hidden>
+                <a class="sound-link"
+                    href="https://www.myinstants.com/en/instant/cat-laugh-meme-1-15761/?utm_source=copy&utm_medium=share"
+                    target="_blank" rel="noopener noreferrer"></a>
+            </div>
+            <button class="primary" id="modalClose" type="button">
+                Ts
+            </button>
+        </div>
+    </div>
+
+    <!--
+    To play the cat laugh automatically:
+    Put a reusable audio file named "cat-laugh.mp3"
+    in the same folder as this index.html file.
+  -->
+    <audio id="prankSound" src="cat-laugh-meme-1.mp3" preload="auto"></audio>
+
+    <script>
+        const party = document.getElementById("party");
+        const welcome = document.getElementById("welcome");
+        const birthday = document.getElementById("birthday");
+        const gift = document.getElementById("gift");
+        const readyButton = document.getElementById("readyButton");
+        const countdownEl = document.getElementById("countdown");
+        const intro = document.getElementById("intro");
+        const message = document.getElementById("message");
+        const flame = document.getElementById("flame");
+
+        const modalBackdrop = document.getElementById("modalBackdrop");
+        const modalEmoji = document.getElementById("modalEmoji");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalText = document.getElementById("modalText");
+        const modalClose = document.getElementById("modalClose");
+        const soundFallback = document.getElementById("soundFallback");
+        const prankSound = document.getElementById("prankSound");
+
+        let started = false;
+        let giftTapped = false;
+        let countdownRunning = false;
+        let prankFinished = false;
+        let currentPopup = "";
+
+        // Create falling confetti.
+        const confettiColors = [
+            "#ff78aa", "#d5a8ff", "#fff0a8",
+            "#ffb7d5", "#ffffff", "#bba7ff"
+        ];
+
+        for (let i = 0; i < 65; i++) {
+            const bit = document.createElement("div");
+            bit.className = "confetti";
+            bit.style.left = Math.random() * 100 + "%";
+            bit.style.animationDuration = (5 + Math.random() * 8) + "s";
+            bit.style.animationDelay = (-Math.random() * 12) + "s";
+            bit.style.background =
+                confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            bit.style.transform = `rotate(${Math.random() * 360}deg)`;
+            party.appendChild(bit);
+        }
+
+        function showPage(page) {
+            document.querySelectorAll(".page").forEach(section => {
+                section.classList.remove("active");
+            });
+            page.classList.add("active");
+        }
+
+        // The whole welcome screen is clickable.
+        welcome.addEventListener("click", () => {
+            if (started) return;
+            started = true;
+            showPage(birthday);
+        });
+
+        function openPopup({ emoji, title, text, type }) {
+            currentPopup = type;
+            modalEmoji.textContent = emoji;
+            modalTitle.textContent = title;
+            modalText.textContent = text;
+            soundFallback.hidden = type !== "prank";
+            modalBackdrop.hidden = false;
+            modalClose.focus();
+        }
+
+        function closePopup() {
+            modalBackdrop.hidden = true;
+
+            // Step 2: the Ready button appears after the first popup closes.
+            if (currentPopup === "gift") {
+                readyButton.hidden = false;
+                message.textContent =
+                    "Whenever you are ready. 😇";
+                readyButton.focus();
+            }
+
+            currentPopup = "";
+        }
+
+        modalClose.addEventListener("click", closePopup);
+
+        // Clicking the dark area around the popup also closes it.
+        modalBackdrop.addEventListener("click", event => {
+            if (event.target === modalBackdrop) closePopup();
+        });
+
+        // STEP 1: Tapping the present shows the warning popup.
+        gift.addEventListener("click", () => {
+            if (giftTapped || countdownRunning || prankFinished) return;
+
+            giftTapped = true;
+            gift.disabled = true;
+
+            openPopup({
+                emoji: "🎁",
+                title: "Akhm, excuse me?!",
+                text: "Why are you in so hurry. Blow out the candle first.",
+                type: "gift"
+            });
+        });
+
+        // STEP 2 + 3: Ready button begins the countdown.
+        readyButton.addEventListener("click", () => {
+            if (countdownRunning || prankFinished) return;
+
+            countdownRunning = true;
+            readyButton.hidden = true;
+            gift.disabled = true;
+
+            intro.textContent = "Close your eyes and make a wish, My Boo! 💗";
+            message.textContent = "Here we gooooo...";
+            countdownEl.textContent = "3";
+
+            let number = 3;
+
+            const timer = setInterval(() => {
+                number--;
+
+                if (number > 0) {
+                    countdownEl.textContent = String(number);
+                    return;
+                }
+
+                clearInterval(timer);
+
+                // Step 3 ends with BLOW!
+                countdownEl.textContent = "BLOW! 💨";
+                // message.textContent = "Did you blow it out?! 👀";
+
+                // STEP 4: Two seconds later, reveal the prank.
+                setTimeout(showPrank, 2000);
+            }, 1000);
+        });
+
+        // STEP 4: Show the prank popup and attempt to play the sound.
+        function showPrank() {
+            if (prankFinished) return;
+
+            prankFinished = true;
+            countdownRunning = false;
+
+            openPopup({
+                emoji: "😹",
+                title: "BLEH! TRICKED YA!",
+                text: "HAHAHAHA! 😭😂 You really thought it was that easy?! Happy birthday, My Boo! 💗🎂",
+                type: "prank"
+            });
+
+            // A webpage URL cannot be used as an audio file.
+            // This attempts to play cat-laugh.mp3 from the repository.
+            prankSound.currentTime = 0;
+
+            const playAttempt = prankSound.play();
+
+            if (playAttempt && typeof playAttempt.catch === "function") {
+                playAttempt.catch(() => {
+                    soundFallback.hidden = false;
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
